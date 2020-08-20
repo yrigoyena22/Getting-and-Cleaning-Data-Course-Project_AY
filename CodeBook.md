@@ -56,17 +56,37 @@ X <- rbind(x_train, x_test)
 Y <- rbind(y_train, y_test)
 Subject <- rbind(subject_train, subject_test)
 Merged_Data <- cbind(Subject, Y, X)
-
-Task 4.
-
-
+(X)It contains 10,299 rows, 563 total columns
+(Y) It contains 10,299 rows, 1 total columns
+Subject contains 10,299 rows, 1 total columns
+Merged_Data contains 10299 rows, 563 column
 
 Step 2. Extracts only the measurements on the mean and standard deviation for each measurement.
+I updated the following packages
+library(data.table)
+library(magrittr)
+library(dplyr)
+TidyDataSP <- Merged_Data %>% select(subject, code, contains("mean"), contains("std"))
+It contains 10,299 entries(rows), 88 total columns
 
 Step 3. Uses descriptive activity names to name the activities in the data set
-
+All numbers in code column of the "TidyDataSP" replaced with corresponding activity taken from second column of the activities variable
 
 Step 4. Appropriately labels the data set with descriptive variable names.
-
+code column in TidyData renamed into activities
+Entire Acc in column’s name replaced by Accelerometer
+Entire Gyro in column’s name replaced by Gyroscope
+Entire Bo_dy in column’s name replaced by Body
+Entire Magn in column’s name replaced by Magnitude
+Entire start with character f in column’s name replaced by Frequency
+Entire start with character t in column’s name replaced by Time
 
 Step 5. From the data set in step 4, creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+FinalData contains 180 entries(rows), and 88 total columns, It was created by sumarizing TidyDataSP taking the means of each variable per activity and for each subject, (first data was groupped by subject and activity).
+FinalData <- TidyDataSP %>%
+    group_by(subject, activity) %>%
+    summarise_all(funs(mean))
+write.table(FinalData, "FinalData.txt", row.name=FALSE)
+Export FinalData into FinalData.txt file.
+str(FinalData)
+FinalData
